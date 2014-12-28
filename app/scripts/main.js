@@ -5,7 +5,7 @@
   require('angular');
   require('angular-route');
   require('angular-animate');
-  var mainCtrl = require('./mainctrl');
+  var mainCtrl = require('./controllers/mainctrl');
 
   angular.module('SampleApp', ['ngRoute', 'ngAnimate'])
 

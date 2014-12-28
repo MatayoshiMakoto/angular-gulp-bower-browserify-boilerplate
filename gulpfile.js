@@ -84,13 +84,13 @@ gulp.task('connectDist', function () {
 });
 
 gulp.task('browserify', function() {
-  gulp.src(['app/js/main.js'])
+  gulp.src(['app/scripts/main.js'])
   .pipe(browserify({
     insertGlobals: true,
     debug: false
   }))
   .pipe(concat('bundled.js'))
-  .pipe(gulp.dest('dist/js'))
+  .pipe(gulp.dest('dist/scripts'))
   .pipe(refresh(lrserver)); // Tell the lrserver to refresh
 });
 
@@ -112,9 +112,9 @@ gulp.task('views', function() {
 gulp.task('styles', function() {
 
   // Any other css files from app/views
-  gulp.src('./app/css/**/*.css')
+  gulp.src('./app/styles/**/*.css')
   // Will be put in the dist/views folder
-  .pipe(gulp.dest('dist/css/'))
+  .pipe(gulp.dest('dist/styles/'))
   .pipe(refresh(lrserver)); // Tell the lrserver to refresh
 });
 
@@ -125,7 +125,7 @@ gulp.task('watch', ['lint'], function() {
   refresh.listen(livereloadport);
 
   // Watch our scripts
-  gulp.watch(['app/js/*.js', 'app/js/**/*.js'],[
+  gulp.watch(['app/scripts/*.js', 'app/scripts/**/*.js'],[
     'lint',
     'browserify'
   ]);
@@ -134,7 +134,7 @@ gulp.task('watch', ['lint'], function() {
   'views'
   ]);
 
-  gulp.watch(['app/css/**/*.css'], [
+  gulp.watch(['app/styles/**/*.css'], [
   'styles'
   ]);
 });
