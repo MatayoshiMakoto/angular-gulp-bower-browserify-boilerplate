@@ -1,4 +1,4 @@
 module.exports = function($scope) {
-  $scope.test = "Testing2...";
+  $scope.test = "TestingNanana...";
   console.log("required!");
 };

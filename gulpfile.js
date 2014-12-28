@@ -9,6 +9,26 @@ var minifyCSS = require('gulp-minify-css');
 var clean = require('gulp-clean');
 var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
+var runSequence = require('run-sequence');
+
+var embedlr = require('gulp-embedlr'),
+    refresh = require('gulp-livereload'),
+    lrserver = require('tiny-lr')(),
+    express = require('express'),
+    livereload = require('connect-livereload'),
+    livereloadport = 35729,
+    serverport = 5000;
+
+// Set up an express server (but not starting it yet)
+var server = express();
+// Add live reload
+server.use(livereload({port: livereloadport}));
+// Use our 'dist' folder as rootfolder
+server.use(express.static('./dist'));
+// Because I like HTML5 pushstate .. this redirects everything back to our index.html
+server.all('/*', function(req, res) {
+    res.sendfile('index.html', { root: 'dist' });
+});
 
 // tasks
 gulp.task('lint', function() {
@@ -20,8 +40,6 @@ gulp.task('lint', function() {
 
 gulp.task('clean', function() {
     gulp.src('./dist/*')
-      .pipe(clean({force: true}));
-    gulp.src('./app/js/bundled.js')
       .pipe(clean({force: true}));
 });
 
@@ -69,27 +87,72 @@ gulp.task('browserify', function() {
   gulp.src(['app/js/main.js'])
   .pipe(browserify({
     insertGlobals: true,
-    debug: true
+    debug: false
   }))
   .pipe(concat('bundled.js'))
-  .pipe(gulp.dest('./app/js'))
+  .pipe(gulp.dest('dist/js'))
+  .pipe(refresh(lrserver)); // Tell the lrserver to refresh
 });
 
-gulp.task('browserifyDist', function() {
-  gulp.src(['app/js/main.js'])
-  .pipe(browserify({
-    insertGlobals: true,
-    debug: true
-  }))
-  .pipe(concat('bundled.js'))
-  .pipe(gulp.dest('./dist/js'))
+// Views task
+gulp.task('views', function() {
+  // Get our index.html
+  gulp.src('app/index.html')
+  // And put it in the dist folder
+  .pipe(gulp.dest('dist/'));
+
+  // Any other view files from app/views
+  gulp.src('./app/views/**/*')
+  // Will be put in the dist/views folder
+  .pipe(gulp.dest('dist/views/'))
+  .pipe(refresh(lrserver)); // Tell the lrserver to refresh
 });
 
-// default task
-gulp.task('default',
-  ['lint', 'browserify', 'connect']
-);
+// Views task
+gulp.task('styles', function() {
+
+  // Any other css files from app/views
+  gulp.src('./app/css/**/*.css')
+  // Will be put in the dist/views folder
+  .pipe(gulp.dest('dist/css/'))
+  .pipe(refresh(lrserver)); // Tell the lrserver to refresh
+});
+
+gulp.task('watch', ['lint'], function() {
+  // Start webserver
+  server.listen(serverport);
+  // Start live reload
+  refresh.listen(livereloadport);
+
+  // Watch our scripts
+  gulp.watch(['app/js/*.js', 'app/js/**/*.js'],[
+    'lint',
+    'browserify'
+  ]);
+
+  gulp.watch(['app/index.html', 'app/views/**/*.html'], [
+  'views'
+  ]);
+
+  gulp.watch(['app/css/**/*.css'], [
+  'styles'
+  ]);
+});
+
+gulp.task('initial-clean', function() {
+    return gulp.src('./dist/*')
+      .pipe(clean({force: true}));
+});
+
+gulp.task('dev', function(callback) {
+  runSequence('initial-clean',
+              ['views', 'styles', 'copy-bower-components', 'lint', 'browserify'],
+              callback);
+});
+
+gulp.task('default', ['dev', 'watch']);
+
 // build task
 gulp.task('build',
-  ['lint', 'minify-css', 'browserifyDist', 'copy-html-files', 'copy-bower-components', 'connectDist']
+  ['lint', 'minify-css', 'browserify', 'copy-html-files', 'copy-bower-components', 'connectDist']
 );
