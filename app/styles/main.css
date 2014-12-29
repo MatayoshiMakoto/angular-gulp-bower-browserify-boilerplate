@@ -1,0 +1,86 @@
+/* Space out content a bit */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Custom page header */
+.header {
+  border-bottom: 1px solid #e5e5e5;
+}
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+  padding-bottom: 19px;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.jumbotron .btn {
+  font-size: 21px;
+  padding: 14px 24px;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Animations through CSS*/
+.animate-view.ng-enter {
+  transition:1s all 0.5s ease;
+  -webkit-transition:1s all 0.5s ease;
+  -moz-transition:1s all 0.5s ease;
+  -o-transition:1s all 0.5s ease;
+  
+   
+  position:relative;
+  opacity:0;
+  right:20px;
+}
+
+.animate-view.ng-enter-active {
+  right:0;
+  opacity: 1;
+}
+
+.animate-view.ng-leave{
+  transition: all 0.5s ease;
+  -webkit-transition:all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+
+  position:relative;
+  opacity:1;
+  right:0px;
+}
+
+.animate-view.ng-leave-active{
+  right:20px;
+  opacity:0;
+}

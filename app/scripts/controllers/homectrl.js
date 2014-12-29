@@ -1,4 +1,4 @@
 module.exports = function($scope) {
-  $scope.test = "TestingNananallll...";
+  $scope.pageClass = 'animate-view';
   console.log("required!");
 };

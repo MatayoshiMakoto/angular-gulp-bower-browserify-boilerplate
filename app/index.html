@@ -13,11 +13,36 @@
     <link rel="stylesheet" href="styles/main.css"/>
   </head>
   <body>
+
     <div class="container">
-      <h1>Angular-Gulp-Browserify-Starteroi</h1>
-      <!-- views -->
-      <div ng-view></div>
+    
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a ng-href="#/">Home</a></li>
+          <li><a ng-href="#/about">About</a></li>
+        </ul>
+        <h3 class="text-muted">angular-boilerplate</h3>
+
+      <hr />
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-8">
+          <div class = "{{ pageClass }}"ng-view=""></div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+          <div class="jumbotron">
+            <p class="lead">
+              This should be the side bar location if this app requires it.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>Powered by Angular, Bower, Gulp and Browserify.</p>
+      </div>
     </div>
+
     <!-- scripts -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>

@@ -5,20 +5,23 @@
   require('angular');
   require('angular-route');
   require('angular-animate');
-  var mainCtrl = require('./controllers/mainctrl');
+  var homeCtrl = require('./controllers/homectrl');
+  var aboutCtrl = require('./controllers/aboutctrl');
 
   angular.module('SampleApp', ['ngRoute', 'ngAnimate'])
 
   .config([
-    '$locationProvider',
     '$routeProvider',
-    function($locationProvider, $routeProvider) {
-      $locationProvider.hashPrefix('!');
+    function($routeProvider) {
       // routes
       $routeProvider
         .when("/", {
-          templateUrl: "./views/partial1.html",
-          controller: "MainController"
+          templateUrl: "./views/home.html",
+          controller: "HomeController"
+        })
+        .when("/about", {
+          templateUrl: "./views/about.html",
+          controller: "AboutController"
         })
         .otherwise({
            redirectTo: '/'
@@ -26,7 +29,9 @@
     }
   ])
 
-  //Load controller
-  .controller('MainController', ['$scope', mainCtrl]);
+  //Load controllers
+  .controller('HomeController', ['$scope', homeCtrl])
+  .controller('AboutController', ['$scope', aboutCtrl]);
+
 
 }());
